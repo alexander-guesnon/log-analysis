@@ -1,5 +1,35 @@
 #1 import libraries to query PSQL
 
+
+'''
+tables make up
+authors (
+    author integer
+    title text
+    slug text
+    body text
+    time timestamp with time zone
+    id integer
+)
+
+log (
+    path text
+    ip inet
+    method text
+    status text
+    time timestamp with timezone
+    id integer
+)
+
+authors (
+    name text
+    bio text
+    id integer
+)
+
+'''
+
+
 '''
 Input: void
 Output: void
