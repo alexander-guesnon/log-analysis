@@ -53,7 +53,38 @@ authors (
  Markoff Chaney         | Markoff Chaney is the product of random genetics.                                                  |  4
 
 
+http://www.w3resource.com/PostgreSQL/substring-function.php
+select substring(path,10) from log;
 
+--from--
+ /
+ /article/candidate-is-jerk
+ /article/goats-eat-googles
+ /article/goats-eat-googles
+ /article/balloon-goons-doomed
+ /
+ /article/candidate-is-jerk
+
+
+--to--
+ candidate-is-jerk
+ goats-eat-googles
+ goats-eat-googles
+ balloon-goons-doomed
+
+ candidate-is-jerk
+
+ bears-love-berries
+
+ trouble-for-troubled
+
+ candidate-is-jerk
+ bad-things-gone
+
+
+--
+
+need to get rid of null rows
 
 
 '''
