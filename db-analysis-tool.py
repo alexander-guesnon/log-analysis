@@ -3,7 +3,7 @@
 
 '''
 tables make up
-authors (
+articles (
     author integer
     title text
     slug text
@@ -95,7 +95,11 @@ select * from (select substring(path,10) as slug from log limit 10) as modifiedL
  candidate-is-jerk
  bears-love-berries
 (6 rows)
+--
 
+SELECT articles.title FROM
+articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 10) AS modifiedLog
+WHERE path!='' AND modifiedLog.path=articles.slug;
 '''
 
 
