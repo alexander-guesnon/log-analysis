@@ -79,6 +79,49 @@ authors (
 
 
 
+
+
+
+            SELECT * FROM authors,(SELECT articles.author, articles.title ,COUNT(*) AS views FROM articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000)
+            AS modifiedLog
+            WHERE path!='' AND modifiedLog.path=articles.slug
+            GROUP BY articles.title, articles.author
+            ORDER BY views DESC) AS articleviews
+            WHERE articleviews.author=authors.id;
+
+
+
+          name          |                                                bio                                                 | id | author |               title                | views
+------------------------+----------------------------------------------------------------------------------------------------+----+--------+------------------------------------+-------
+ Ursula La Multa        | Ursula La Multa is an expert on bears, bear abundance, and bear accessories.                       |  1 |      1 | There are a lot of bears           |    44
+ Ursula La Multa        | Ursula La Multa is an expert on bears, bear abundance, and bear accessories.                       |  1 |      1 | Media obsessed with bears          |    46
+ Ursula La Multa        | Ursula La Multa is an expert on bears, bear abundance, and bear accessories.                       |  1 |      1 | Goats eat Google's lawn            |    47
+ Ursula La Multa        | Ursula La Multa is an expert on bears, bear abundance, and bear accessories.                       |  1 |      1 | Bears love berries, alleges bear   |   148
+ Rudolf von Treppenwitz | Rudolf von Treppenwitz is a nonprofitable disorganizer specializing in procrastinatory operations. |  2 |      2 | Trouble for troubled troublemakers |    48
+ Rudolf von Treppenwitz | Rudolf von Treppenwitz is a nonprofitable disorganizer specializing in procrastinatory operations. |  2 |      2 | Candidate is jerk, alleges rival   |   224
+ Anonymous Contributor  | Anonymous Contributor's parents had unusual taste in names.                                        |  3 |      3 | Bad things gone, say good people   |   104
+ Markoff Chaney         | Markoff Chaney is the product of random genetics.                                                  |  4 |      4 | Balloon goons doomed               |    36
+
+
+
+
+
+            SELECT authors.name ,SUM(views) AS views FROM authors, (SELECT articles.author, articles.title ,COUNT(*) AS views FROM articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000)
+            AS modifiedLog
+            WHERE path!='' AND modifiedLog.path=articles.slug
+            GROUP BY articles.title, articles.author
+            ORDER BY views DESC) AS articleviews
+            WHERE articleviews.author=authors.id
+            GROUP BY authors.name
+            ORDER BY views DESC;
+
+
+
+
+
+
+
+
 '''
 
 
@@ -98,13 +141,7 @@ def DB_Status():
         ORDER BY views DESC
         LIMIT 3;
     '''
-        '''
-            SELECT * FROM authors,(SELECT articles.author, articles.title ,COUNT(*) AS views FROM articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000)
-            AS modifiedLog
-            WHERE path!='' AND modifiedLog.path=articles.slug
-            GROUP BY articles.title, articles.author
-            ORDER BY views DESC) AS articleviews;
-        '''
+
     #3 store in variable (top_3_articals)
     #4 run a query to find the top authors of all time.
 
