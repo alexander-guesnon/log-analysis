@@ -65,106 +65,18 @@ authors (
  Markoff Chaney         | Markoff Chaney is the product of random genetics.                                                  |  4
 
 
-http://www.w3resource.com/PostgreSQL/substring-function.php
- select substring(path,10) from log limit 10;
 
---from--
- /
- /article/candidate-is-jerk
- /article/goats-eat-googles
- /article/goats-eat-googles
- /article/balloon-goons-doomed
- /
- /article/candidate-is-jerk
+ author |               title                |           slug
+--------+------------------------------------+---------------------------
+      3 | Bad things gone, say good people   | bad-things-gone
+      4 | Balloon goons doomed               | balloon-goons-doomed
+      1 | Bears love berries, alleges bear   | bears-love-berries
+      2 | Candidate is jerk, alleges rival   | candidate-is-jerk
+      1 | Goats eat Google's lawn            | goats-eat-googles
+      1 | Media obsessed with bears          | media-obsessed-with-bears
+      2 | Trouble for troubled troublemakers | trouble-for-troubled
+      1 | There are a lot of bears           | so-many-bears
 
-
---to--
- candidate-is-jerk
- goats-eat-googles
- goats-eat-googles
- balloon-goons-doomed
-
- candidate-is-jerk
-
- bears-love-berries
-
- trouble-for-troubled
-
- candidate-is-jerk
- bad-things-gone
-
-
---
-
-select * from (select substring(path,10) as slug from log limit 10) as modifiedLog where slug!='';
-
-         slug
-----------------------
- candidate-is-jerk
- goats-eat-googles
- goats-eat-googles
- balloon-goons-doomed
- candidate-is-jerk
- bears-love-berries
-(6 rows)
---
-
-SELECT articles.title FROM
-articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 10) AS modifiedLog
-WHERE path!='' AND modifiedLog.path=articles.slug;
-
-SELECT articles.title ,COUNT(*) AS views FROM
-articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000) AS modifiedLog
-WHERE path!='' AND modifiedLog.path=articles.slug
-GROUP BY articles.title;
-
-               title                | views
-------------------------------------+-------
- Bears love berries, alleges bear   |   148
- Balloon goons doomed               |    36
- Bad things gone, say good people   |   104
- Trouble for troubled troublemakers |    48
- There are a lot of bears           |    44
- Media obsessed with bears          |    46
- Candidate is jerk, alleges rival   |   224
- Goats eat Google's lawn            |    47
-(8 rows)
-
-SELECT articles.title ,COUNT(*) AS views FROM
-articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000) AS modifiedLog
-WHERE path!='' AND modifiedLog.path=articles.slug
-GROUP BY articles.title
-ORDER BY views DESC;
-
-               title                | views
-------------------------------------+-------
- Candidate is jerk, alleges rival   |   224
- Bears love berries, alleges bear   |   148
- Bad things gone, say good people   |   104
- Trouble for troubled troublemakers |    48
- Goats eat Google's lawn            |    47
- Media obsessed with bears          |    46
- There are a lot of bears           |    44
- Balloon goons doomed               |    36
-(8 rows)
-
-SELECT modifiedLog.path ,COUNT(*) AS views FROM
-articles, (SELECT SUBSTRING(path,10) AS path FROM log) AS modifiedLog
-WHERE path!='' AND modifiedLog.path=articles.slug
-GROUP BY  modifiedLog.path
-ORDER BY views DESC;
-
-
-               title                | views
-------------------------------------+--------
- Candidate is jerk, alleges rival   | 338647
- Bears love berries, alleges bear   | 253801
- Bad things gone, say good people   | 170098
- Goats eat Google's lawn            |  84906
- Trouble for troubled troublemakers |  84810
- Balloon goons doomed               |  84557
- There are a lot of bears           |  84504
- Media obsessed with bears          |  84383
 
 
 '''
@@ -178,8 +90,24 @@ top authors, and errors that are over 1% of all requests.
 '''
 def DB_Status():
     #2 run a query to find the 3 top articles of all time
+    '''
+        SELECT articles.title ,COUNT(*) AS views FROM articles, (SELECT SUBSTRING(path,10) AS path FROM log)
+        AS modifiedLog
+        WHERE path!='' AND modifiedLog.path=articles.slug
+        GROUP BY articles.title
+        ORDER BY views DESC
+        LIMIT 3;
+    '''
+        '''
+            SELECT * FROM authors,(SELECT articles.author, articles.title ,COUNT(*) AS views FROM articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000)
+            AS modifiedLog
+            WHERE path!='' AND modifiedLog.path=articles.slug
+            GROUP BY articles.title, articles.author
+            ORDER BY views DESC) AS articleviews;
+        '''
     #3 store in variable (top_3_articals)
     #4 run a query to find the top authors of all time.
+
     #5 store in variable (top_autohors)
     #6 run a query to find what days resulted in having their total requests error over 1%
     #7 store in variable (important_errors)
