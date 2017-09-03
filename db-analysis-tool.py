@@ -54,7 +54,7 @@ authors (
 
 
 http://www.w3resource.com/PostgreSQL/substring-function.php
-select substring(path,10) from log;
+ select substring(path,10) from log limit 10;
 
 --from--
  /
@@ -84,8 +84,17 @@ select substring(path,10) from log;
 
 --
 
-need to get rid of null rows
+select * from (select substring(path,10) as slug from log limit 10) as modifiedLog where slug!='';
 
+         slug
+----------------------
+ candidate-is-jerk
+ goats-eat-googles
+ goats-eat-googles
+ balloon-goons-doomed
+ candidate-is-jerk
+ bears-love-berries
+(6 rows)
 
 '''
 
