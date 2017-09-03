@@ -18,6 +18,18 @@ articles (
  4      | Balloon goons doomed               | balloon-goons-doomed      | The doom of balloon goons is true news.                                     | The goons are doomed, no matter how ...   | 2016-08-15 18:55:10.814316+00 | 24
 
 
+               title                |           slug
+------------------------------------+---------------------------
+ Bad things gone, say good people   | bad-things-gone
+ Balloon goons doomed               | balloon-goons-doomed
+ Bears love berries, alleges bear   | bears-love-berries
+ Candidate is jerk, alleges rival   | candidate-is-jerk
+ Goats eat Google's lawn            | goats-eat-googles
+ Media obsessed with bears          | media-obsessed-with-bears
+ Trouble for troubled troublemakers | trouble-for-troubled
+ There are a lot of bears           | so-many-bears
+
+
 log (
     path text
     ip inet
@@ -100,6 +112,14 @@ select * from (select substring(path,10) as slug from log limit 10) as modifiedL
 SELECT articles.title FROM
 articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 10) AS modifiedLog
 WHERE path!='' AND modifiedLog.path=articles.slug;
+
+SELECT articles.title ,COUNT(*) AS views FROM
+articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000) AS modifiedLog
+WHERE path!='' AND modifiedLog.path=articles.slug
+GROUP BY articles.title;
+
+
+
 '''
 
 
