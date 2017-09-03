@@ -118,6 +118,53 @@ articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000) AS modifiedLog
 WHERE path!='' AND modifiedLog.path=articles.slug
 GROUP BY articles.title;
 
+               title                | views
+------------------------------------+-------
+ Bears love berries, alleges bear   |   148
+ Balloon goons doomed               |    36
+ Bad things gone, say good people   |   104
+ Trouble for troubled troublemakers |    48
+ There are a lot of bears           |    44
+ Media obsessed with bears          |    46
+ Candidate is jerk, alleges rival   |   224
+ Goats eat Google's lawn            |    47
+(8 rows)
+
+SELECT articles.title ,COUNT(*) AS views FROM
+articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000) AS modifiedLog
+WHERE path!='' AND modifiedLog.path=articles.slug
+GROUP BY articles.title
+ORDER BY views DESC;
+
+               title                | views
+------------------------------------+-------
+ Candidate is jerk, alleges rival   |   224
+ Bears love berries, alleges bear   |   148
+ Bad things gone, say good people   |   104
+ Trouble for troubled troublemakers |    48
+ Goats eat Google's lawn            |    47
+ Media obsessed with bears          |    46
+ There are a lot of bears           |    44
+ Balloon goons doomed               |    36
+(8 rows)
+
+SELECT modifiedLog.path ,COUNT(*) AS views FROM
+articles, (SELECT SUBSTRING(path,10) AS path FROM log) AS modifiedLog
+WHERE path!='' AND modifiedLog.path=articles.slug
+GROUP BY  modifiedLog.path
+ORDER BY views DESC;
+
+
+               title                | views
+------------------------------------+--------
+ Candidate is jerk, alleges rival   | 338647
+ Bears love berries, alleges bear   | 253801
+ Bad things gone, say good people   | 170098
+ Goats eat Google's lawn            |  84906
+ Trouble for troubled troublemakers |  84810
+ Balloon goons doomed               |  84557
+ There are a lot of bears           |  84504
+ Media obsessed with bears          |  84383
 
 
 '''
