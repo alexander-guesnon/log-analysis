@@ -115,8 +115,27 @@ authors (
             GROUP BY authors.name
             ORDER BY views DESC;
 
+                      name          | views
+------------------------+-------
+ Ursula La Multa        |   285
+ Rudolf von Treppenwitz |   272
+ Anonymous Contributor  |   104
+ Markoff Chaney         |    36
 
 
+
+            SELECT authors.name ,SUM(views) AS views
+            FROM authors, (
+                SELECT articles.author, articles.title ,COUNT(*) AS views
+                FROM articles, (
+                    SELECT SUBSTRING(path,10) AS path
+                    FROM log LIMIT 1000
+                ) AS modifiedLog
+                WHERE path!='' AND modifiedLog.path=articles.slug
+                GROUP BY articles.title, articles.author) AS articleviews
+            WHERE articleviews.author=authors.id
+            GROUP BY authors.name
+            ORDER BY views DESC;
 
 
 
@@ -144,7 +163,20 @@ def DB_Status():
 
     #3 store in variable (top_3_articals)
     #4 run a query to find the top authors of all time.
-
+    '''
+        SELECT authors.name ,SUM(views) AS views
+        FROM authors, (
+            SELECT articles.author, articles.title ,COUNT(*) AS views
+            FROM articles, (
+                SELECT SUBSTRING(path,10) AS path
+                FROM log
+            ) AS modifiedLog
+            WHERE path!='' AND modifiedLog.path=articles.slug
+            GROUP BY articles.title, articles.author) AS articleviews
+        WHERE articleviews.author=authors.id
+        GROUP BY authors.name
+        ORDER BY views DESC;
+        '''
     #5 store in variable (top_autohors)
     #6 run a query to find what days resulted in having their total requests error over 1%
     #7 store in variable (important_errors)
