@@ -12,6 +12,12 @@ authors (
     id integer
 )
 
+ author |    title                           |  slug                     |                  lead                                                       |        body                               |             time              | id
+--------+------------------------------------+---------------------------+-----------------------------------------------------------------------------+-------------------------------------------+-------------------------------+---
+ 3      | Bad things gone, say good people   | bad-things-gone           | All bad things have gone away, according to a poll of good people Thursday. | Bad things are a thing of the bad, bad... | 2016-08-15 18:55:10.814316+00 | 23
+ 4      | Balloon goons doomed               | balloon-goons-doomed      | The doom of balloon goons is true news.                                     | The goons are doomed, no matter how ...   | 2016-08-15 18:55:10.814316+00 | 24
+
+
 log (
     path text
     ip inet
@@ -21,11 +27,34 @@ log (
     id integer
 )
 
+                path                 |       ip       | method |    status     |          time          |   id
+-------------------------------------+----------------+--------+---------------+------------------------+---------
+ /                                   | 198.51.100.195 | GET    | 200 OK        | 2016-07-01 07:00:00+00 | 1678923
+ /article/candidate-is-jerk          | 198.51.100.195 | GET    | 200 OK        | 2016-07-01 07:00:47+00 | 1678924
+ /article/goats-eat-googles          | 198.51.100.195 | GET    | 200 OK        | 2016-07-01 07:00:34+00 | 1678925
+ /article/goats-eat-googles          | 198.51.100.195 | GET    | 200 OK        | 2016-07-01 07:00:52+00 | 1678926
+ /article/balloon-goons-doomed       | 198.51.100.195 | GET    | 200 OK        | 2016-07-01 07:00:23+00 | 1678927
+ /article/balloon-goons-doomede      | 192.0.2.30     | GET    | 404 NOT FOUND | 2016-07-01 07:19:09+00 | 1679620
+
+
+
+
 authors (
     name text
     bio text
     id integer
 )
+
+          name          |                                                bio                                                 | id
+------------------------+----------------------------------------------------------------------------------------------------+----
+ Ursula La Multa        | Ursula La Multa is an expert on bears, bear abundance, and bear accessories.                       |  1
+ Rudolf von Treppenwitz | Rudolf von Treppenwitz is a nonprofitable disorganizer specializing in procrastinatory operations. |  2
+ Anonymous Contributor  | Anonymous Contributor's parents had unusual taste in names.                                        |  3
+ Markoff Chaney         | Markoff Chaney is the product of random genetics.                                                  |  4
+
+
+
+
 
 '''
 
