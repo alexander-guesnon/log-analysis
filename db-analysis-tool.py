@@ -1,4 +1,4 @@
-#1 import libraries to query PSQL
+# 1 import libraries to query PSQL
 
 
 '''
@@ -65,79 +65,20 @@ authors (
  Markoff Chaney         | Markoff Chaney is the product of random genetics.                                                  |  4
 
 
+SELECT time, status FROM log LIMIT 1000;
 
- author |               title                |           slug
---------+------------------------------------+---------------------------
-      3 | Bad things gone, say good people   | bad-things-gone
-      4 | Balloon goons doomed               | balloon-goons-doomed
-      1 | Bears love berries, alleges bear   | bears-love-berries
-      2 | Candidate is jerk, alleges rival   | candidate-is-jerk
-      1 | Goats eat Google's lawn            | goats-eat-googles
-      1 | Media obsessed with bears          | media-obsessed-with-bears
-      2 | Trouble for troubled troublemakers | trouble-for-troubled
-      1 | There are a lot of bears           | so-many-bears
+          time          |    status
+------------------------+---------------
+ 2016-07-01 07:00:00+00 | 200 OK
+ 2016-07-01 07:00:47+00 | 200 OK
+ 2016-07-01 07:00:34+00 | 200 OK
+ 2016-07-01 07:00:52+00 | 200 OK
+ 2016-07-01 07:00:23+00 | 200 OK
+ 2016-07-01 07:00:05+00 | 200 OK
+ 2016-07-01 07:00:54+00 | 200 OK
 
-
-
-
-
-
-            SELECT * FROM authors,(SELECT articles.author, articles.title ,COUNT(*) AS views FROM articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000)
-            AS modifiedLog
-            WHERE path!='' AND modifiedLog.path=articles.slug
-            GROUP BY articles.title, articles.author
-            ORDER BY views DESC) AS articleviews
-            WHERE articleviews.author=authors.id;
-
-
-
-          name          |                                                bio                                                 | id | author |               title                | views
-------------------------+----------------------------------------------------------------------------------------------------+----+--------+------------------------------------+-------
- Ursula La Multa        | Ursula La Multa is an expert on bears, bear abundance, and bear accessories.                       |  1 |      1 | There are a lot of bears           |    44
- Ursula La Multa        | Ursula La Multa is an expert on bears, bear abundance, and bear accessories.                       |  1 |      1 | Media obsessed with bears          |    46
- Ursula La Multa        | Ursula La Multa is an expert on bears, bear abundance, and bear accessories.                       |  1 |      1 | Goats eat Google's lawn            |    47
- Ursula La Multa        | Ursula La Multa is an expert on bears, bear abundance, and bear accessories.                       |  1 |      1 | Bears love berries, alleges bear   |   148
- Rudolf von Treppenwitz | Rudolf von Treppenwitz is a nonprofitable disorganizer specializing in procrastinatory operations. |  2 |      2 | Trouble for troubled troublemakers |    48
- Rudolf von Treppenwitz | Rudolf von Treppenwitz is a nonprofitable disorganizer specializing in procrastinatory operations. |  2 |      2 | Candidate is jerk, alleges rival   |   224
- Anonymous Contributor  | Anonymous Contributor's parents had unusual taste in names.                                        |  3 |      3 | Bad things gone, say good people   |   104
- Markoff Chaney         | Markoff Chaney is the product of random genetics.                                                  |  4 |      4 | Balloon goons doomed               |    36
-
-
-
-
-
-            SELECT authors.name ,SUM(views) AS views FROM authors, (SELECT articles.author, articles.title ,COUNT(*) AS views FROM articles, (SELECT SUBSTRING(path,10) AS path FROM log LIMIT 1000)
-            AS modifiedLog
-            WHERE path!='' AND modifiedLog.path=articles.slug
-            GROUP BY articles.title, articles.author
-            ORDER BY views DESC) AS articleviews
-            WHERE articleviews.author=authors.id
-            GROUP BY authors.name
-            ORDER BY views DESC;
-
-                      name          | views
-------------------------+-------
- Ursula La Multa        |   285
- Rudolf von Treppenwitz |   272
- Anonymous Contributor  |   104
- Markoff Chaney         |    36
-
-
-
-            SELECT authors.name ,SUM(views) AS views
-            FROM authors, (
-                SELECT articles.author, articles.title ,COUNT(*) AS views
-                FROM articles, (
-                    SELECT SUBSTRING(path,10) AS path
-                    FROM log LIMIT 1000
-                ) AS modifiedLog
-                WHERE path!='' AND modifiedLog.path=articles.slug
-                GROUP BY articles.title, articles.author) AS articleviews
-            WHERE articleviews.author=authors.id
-            GROUP BY authors.name
-            ORDER BY views DESC;
-
-
+https://www.postgresql.org/docs/9.2/static/functions-datetime.html
+date_trunc(text, timestamp)	timestamp	Truncate to specified precision; see also Section 9.9.2	date_trunc('hour', timestamp '2001-02-16 20:38:40')	2001-02-16 20:00:00
 
 
 
@@ -150,10 +91,15 @@ Output: void
 Function: This function will report the current top 3 articles, the current
 top authors, and errors that are over 1% of all requests.
 '''
+
+
 def DB_Status():
-    #2 run a query to find the 3 top articles of all time
+    # 2 run a query to find the 3 top articles of all time
     '''
-        SELECT articles.title ,COUNT(*) AS views FROM articles, (SELECT SUBSTRING(path,10) AS path FROM log)
+        SELECT articles.title ,COUNT(*) AS views FROM articles, (
+            SELECT SUBSTRING(path,10) AS path
+            FROM log
+        )
         AS modifiedLog
         WHERE path!='' AND modifiedLog.path=articles.slug
         GROUP BY articles.title
@@ -161,8 +107,8 @@ def DB_Status():
         LIMIT 3;
     '''
 
-    #3 store in variable (top_3_articals)
-    #4 run a query to find the top authors of all time.
+    # 3 store in variable (top_3_articals)
+    # 4 run a query to find the top authors of all time.
     '''
         SELECT authors.name ,SUM(views) AS views
         FROM authors, (
@@ -176,11 +122,11 @@ def DB_Status():
         WHERE articleviews.author=authors.id
         GROUP BY authors.name
         ORDER BY views DESC;
-        '''
-    #5 store in variable (top_autohors)
-    #6 run a query to find what days resulted in having their total requests error over 1%
-    #7 store in variable (important_errors)
-    #8 print out information in a readable format for the user
+    '''
+    # 5 store in variable (top_autohors)
+    # 6 run a query to find what days resulted in having their total requests error over 1%
+    # 7 store in variable (important_errors)
+    # 8 print out information in a readable format for the user
     print ("hello world")
 
 
