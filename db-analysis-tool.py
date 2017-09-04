@@ -212,71 +212,28 @@ SELECT success.date ,round(
 
  On which days did more than 1% of requests lead to errors
                   -------------
-                  SELECT * FROM (
-                                      SELECT success.date ,round(
-                                      (cast(errors.count as numeric) /cast (success.count as numeric)), 3
-                                      ) AS failure_percentage FROM (
-                                      SELECT date_trunc('day',time) AS date, COUNT(status)
-                                      FROM log
-                                      WHERE status='404 NOT FOUND'
-                                      GROUP BY date
-                                      ORDER BY date
-                                      ) AS errors, (
-                                      SELECT date_trunc('day',time) AS date, COUNT(status)
-                                      FROM log
-                                      WHERE status='200 OK'
-                                      GROUP BY date
-                                      ORDER BY date
-                                      ) AS success
-                  ) AS final
-                  WHERE  failure_percentage > 0.01;
 
 
-          date          | failure_percentage
-------------------------+--------------------
- 2016-07-01 00:00:00+00 |              0.011
- 2016-07-01 00:00:00+00 |              0.011
- 2016-07-01 00:00:00+00 |              0.011
- 2016-07-01 00:00:00+00 |              0.011
- 2016-07-01 00:00:00+00 |              0.011
- 2016-07-01 00:00:00+00 |              0.033
- 2016-07-01 00:00:00+00 |              0.011
- 2016-07-01 00:00:00+00 |              0.011
- 2016-07-01 00:00:00+00 |              0.011
- 2016-07-01 00:00:00+00 |              0.011
- 2016-07-02 00:00:00+00 |              0.023
- 2016-07-03 00:00:00+00 |              0.023
- 2016-07-04 00:00:00+00 |              0.023
- 2016-07-05 00:00:00+00 |              0.023
- 2016-07-06 00:00:00+00 |              0.023
- 2016-07-07 00:00:00+00 |              0.023
- 2016-07-08 00:00:00+00 |              0.023
- 2016-07-09 00:00:00+00 |              0.023
- 2016-07-10 00:00:00+00 |              0.023
- 2016-07-11 00:00:00+00 |              0.023
- 2016-07-12 00:00:00+00 |              0.023
- 2016-07-13 00:00:00+00 |              0.023
- 2016-07-14 00:00:00+00 |              0.023
- 2016-07-15 00:00:00+00 |              0.023
- 2016-07-16 00:00:00+00 |              0.023
- 2016-07-17 00:00:00+00 |              0.023
- 2016-07-18 00:00:00+00 |              0.023
- 2016-07-19 00:00:00+00 |              0.023
- 2016-07-20 00:00:00+00 |              0.023
- 2016-07-21 00:00:00+00 |              0.023
- 2016-07-22 00:00:00+00 |              0.023
- 2016-07-23 00:00:00+00 |              0.023
- 2016-07-24 00:00:00+00 |              0.023
- 2016-07-25 00:00:00+00 |              0.023
- 2016-07-26 00:00:00+00 |              0.023
- 2016-07-27 00:00:00+00 |              0.023
- 2016-07-28 00:00:00+00 |              0.023
- 2016-07-29 00:00:00+00 |              0.023
- 2016-07-30 00:00:00+00 |              0.023
- 2016-07-31 00:00:00+00 |              0.028
 
-
-'''
+            SELECT final.date, failure_percentage FROM (SELECT success.date,
+               Round(100*( Cast(errors.count AS NUMERIC) / Cast (
+                       success.count AS NUMERIC)
+                     ), 2) AS
+               failure_percentage
+            FROM   (SELECT Date_trunc('day', time) AS date,
+                       Count(status)
+                FROM   log
+                WHERE  status = '404 NOT FOUND'
+                GROUP  BY date
+                ORDER  BY date) AS errors,
+               (SELECT Date_trunc('day', time) AS date,
+                       Count(status)
+                FROM   log
+                WHERE  status = '200 OK'
+                GROUP  BY date
+                ORDER  BY date) AS success
+                WHERE errors.date = success.date) AS final
+                WHERE failure_percentage > 1;
 
 
 '''
@@ -319,6 +276,8 @@ def DB_Status():
     '''
     # 5 store in variable (top_autohors)
     # 6 run a query to find what days resulted in having their total requests error over 1%
+
+
     # 7 store in variable (important_errors)
     # 8 print out information in a readable format for the user
     print ("hello world")
