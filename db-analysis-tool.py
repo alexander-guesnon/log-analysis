@@ -1,13 +1,12 @@
 import psycopg2
 
 '''
-Input: void
+Input: t3a (array of object(string, int)), ta(array of object(string, int)), ie
+array of object(date time, float)
 Output: void
-Function: This function will report the current top 3 articles, the current
-top authors, and errors that are over 1% of all requests.
+Function: prints out the Top 3 Articles table, Top Authors table, and the
+Important Errors table
 '''
-
-
 def print_results(t3a, ta, ie):
     top_3_table = '''
 ---------------------------------------------
@@ -22,7 +21,7 @@ def print_results(t3a, ta, ie):
     print (top_3_table),
     for x in range(len(t3a)):
         print(t3t_template.format(t3a[x][0], t3a[x][1]))
-        print("---------------------------------------------")
+    print("---------------------------------------------")
 
     top_authors_table= '''
 ------------------------------------
@@ -35,7 +34,7 @@ def print_results(t3a, ta, ie):
     print(top_authors_table),
     for x in range(len(ta)):
         print(ta_template.format(ta[x][0],ta[x][1]))
-        print("------------------------------------")
+    print("------------------------------------")
 
     important_errors_table = '''
 ----------------------------------------------------
@@ -52,6 +51,13 @@ def print_results(t3a, ta, ie):
         print(ie_template.format( str(ie[x][0]),ie[x][1]))
     print("----------------------------------------------------")
 
+
+'''
+Input: void
+Output: void
+Function: This function will report the current top 3 articles, the current
+top authors, and errors that are over 1% of all requests.
+'''
 def DB_Status():
     try:
         conn=psycopg2.connect(
