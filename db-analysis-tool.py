@@ -38,17 +38,17 @@ def print_results(t3a, ta, ie):
     Log_Output = Log_Output + "------------------------------------\n"
 
     Log_Output = Log_Output + '''
-----------------------------------------------------
-|                 Important Errors                 |
-|--------------------------------------------------|
-|             date          |  failure_percentage  |
-|---------------------------+----------------------|
+-----------------------------------------------------------------------------
+|                              Important Errors                             |
+|---------------------------------------------------------------------------|
+|             date          | Error | Sucess | Total |  failure_percentage  |
+|---------------------------+-------+--------+-------+----------------------|
 '''
-    ie_template = "| {:25} | {:19}% |"
+    ie_template = "| {:25} | {:5} | {:6} | {:5} | {:19}% |"
 
     for x in range(len(ie)):
-        Log_Output = Log_Output + ie_template.format( str(ie[x][0]),ie[x][1])+"\n"
-    Log_Output = Log_Output + "----------------------------------------------------\n"
+        Log_Output = Log_Output + ie_template.format( str(ie[x][0]),ie[x][1],ie[x][2],ie[x][3],ie[x][4])+"\n"
+    Log_Output = Log_Output + "-----------------------------------------------------------------------------\n"
     print(Log_Output)
 
 
@@ -112,28 +112,29 @@ def DB_Status():
     top_autohors=cur.fetchall()
 
     try:
-        cur.execute('''
-                SELECT final.date,
-                       failure_percentage
-                FROM   (SELECT success.date,
-                               Round(100 * ( Cast(errors.count AS NUMERIC) / Cast (
-                                             success.count AS NUMERIC) ),
-                               2) AS failure_percentage
-                        FROM   (SELECT Date_trunc('day', time) AS date,
-                                       Count(status)
-                                FROM   log
-                                WHERE  status = '404 NOT FOUND'
-                                GROUP  BY date
-                                ORDER  BY date) AS errors,
-                               (SELECT Date_trunc('day', time) AS date,
-                                       Count(status)
-                                FROM   log
-                                WHERE  status = '200 OK'
-                                GROUP  BY date
-                                ORDER  BY date) AS success
-                        WHERE  errors.date = success.date) AS final
-                WHERE  failure_percentage > 1;
-                ''')
+        cur.execute('''SELECT *
+FROM   (SELECT success.date,
+               errors.count                 AS Error,
+               success.count                AS Sucess,
+               success.count + errors.count AS Total,
+               Round(100 * ( Cast(errors.count AS NUMERIC) / Cast (
+                             success.count AS NUMERIC) ),
+               2)                           AS failure_percentage
+        FROM   (SELECT Date_trunc('day', time) AS date,
+                       Count(status)
+                FROM   log
+                WHERE  status = '404 NOT FOUND'
+                GROUP  BY date
+                ORDER  BY date) AS errors,
+               (SELECT Date_trunc('day', time) AS date,
+                       Count(status)
+                FROM   log
+                WHERE  status = '200 OK'
+                GROUP  BY date
+                ORDER  BY date) AS success
+        WHERE  errors.date = success.date) AS final
+WHERE  failure_percentage > 1;
+''')
     except Exception, x:
         print("important errors failed to exicute")
         print(x)
