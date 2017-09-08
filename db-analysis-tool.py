@@ -8,7 +8,9 @@ Function: prints out the Top 3 Articles table, Top Authors table, and the
 Important Errors table
 '''
 def print_results(t3a, ta, ie):
-    top_3_table = '''
+    Log_Output ="Db analisis\n";
+
+    Log_Output = Log_Output + '''
 ---------------------------------------------
 |               Top 3 Articles              |
 |-------------------------------------------|
@@ -18,12 +20,11 @@ def print_results(t3a, ta, ie):
 
     t3t_template = "| {:32} | {:6} |"
 
-    print (top_3_table),
     for x in range(len(t3a)):
-        print(t3t_template.format(t3a[x][0], t3a[x][1]))
-    print("---------------------------------------------")
+        Log_Output = Log_Output + t3t_template.format(t3a[x][0], t3a[x][1])+ "\n"
+    Log_Output = Log_Output + "---------------------------------------------\n"
 
-    top_authors_table= '''
+    Log_Output = Log_Output + '''
 ------------------------------------
 |            Top Authors           |
 |----------------------------------|
@@ -31,12 +32,12 @@ def print_results(t3a, ta, ie):
 |-------------------------+--------|
 '''
     ta_template="| {:23} | {:6} |"
-    print(top_authors_table),
-    for x in range(len(ta)):
-        print(ta_template.format(ta[x][0],ta[x][1]))
-    print("------------------------------------")
 
-    important_errors_table = '''
+    for x in range(len(ta)):
+        Log_Output = Log_Output + ta_template.format(ta[x][0],ta[x][1]) + "\n"
+    Log_Output = Log_Output + "------------------------------------\n"
+
+    Log_Output = Log_Output + '''
 ----------------------------------------------------
 |                 Important Errors                 |
 |--------------------------------------------------|
@@ -44,12 +45,11 @@ def print_results(t3a, ta, ie):
 |---------------------------+----------------------|
 '''
     ie_template = "| {:25} | {:19}% |"
-    print(important_errors_table),
 
     for x in range(len(ie)):
-
-        print(ie_template.format( str(ie[x][0]),ie[x][1]))
-    print("----------------------------------------------------")
+        Log_Output = Log_Output + ie_template.format( str(ie[x][0]),ie[x][1])+"\n"
+    Log_Output = Log_Output + "----------------------------------------------------\n"
+    print(Log_Output)
 
 
 '''
