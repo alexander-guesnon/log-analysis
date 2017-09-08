@@ -7,8 +7,10 @@ Output: void
 Function: prints out the Top 3 Articles table, Top Authors table, and the
 Important Errors table
 '''
+
+
 def print_results(t3a, ta, ie):
-    Log_Output ="Db analisis\n";
+    Log_Output = "Db analisis\n"
 
     Log_Output = Log_Output + '''
 ---------------------------------------------
@@ -21,7 +23,8 @@ def print_results(t3a, ta, ie):
     t3t_template = "| {:32} | {:6} |"
 
     for x in range(len(t3a)):
-        Log_Output = Log_Output + t3t_template.format(t3a[x][0], t3a[x][1])+ "\n"
+        Log_Output = Log_Output + \
+            t3t_template.format(t3a[x][0], t3a[x][1]) + "\n"
     Log_Output = Log_Output + "---------------------------------------------\n"
 
     Log_Output = Log_Output + '''
@@ -31,10 +34,10 @@ def print_results(t3a, ta, ie):
 |         Authors         | Views  |
 |-------------------------+--------|
 '''
-    ta_template="| {:23} | {:6} |"
+    ta_template = "| {:23} | {:6} |"
 
     for x in range(len(ta)):
-        Log_Output = Log_Output + ta_template.format(ta[x][0],ta[x][1]) + "\n"
+        Log_Output = Log_Output + ta_template.format(ta[x][0], ta[x][1]) + "\n"
     Log_Output = Log_Output + "------------------------------------\n"
 
     Log_Output = Log_Output + '''
@@ -47,13 +50,26 @@ def print_results(t3a, ta, ie):
     ie_template = "| {:25} | {:5} | {:6} | {:5} | {:19}% |"
 
     for x in range(len(ie)):
-        Log_Output = Log_Output + ie_template.format( str(ie[x][0]),ie[x][1],ie[x][2],ie[x][3],ie[x][4])+"\n"
-    Log_Output = Log_Output + "-----------------------------------------------------------------------------\n"
+        Log_Output = Log_Output + \
+            ie_template.format(str(ie[x][0]), ie[x][1],
+                               ie[x][2], ie[x][3], ie[x][4]) + "\n"
+    Log_Output = (Log_Output +
+                  "------------------------------------"
+                  "-----------------------------------------\n")
+
+    Log_Output = (Log_Output +
+                  "                             By Alex Guesnon    "
+                  "                         \n")
+
+    Log_Output = (Log_Output +
+                  "------------------------------------"
+                  "-----------------------------------------\n")
     print(Log_Output)
 
-    fileout = open('log_output.txt','w')
+    fileout = open('log_output.txt', 'w')
     fileout.write(Log_Output)
     fileout.close()
+
 
 '''
 Input: void
@@ -61,14 +77,16 @@ Output: void
 Function: This function will report the current top 3 articles, the current
 top authors, and errors that are over 1% of all requests.
 '''
+
+
 def DB_Status():
     try:
-        conn=psycopg2.connect(database="news")
-        cur=conn.cursor()
+        conn = psycopg2.connect(database="news")
+        cur = conn.cursor()
     except Exception, x:
         print ("I am unable to connect to the database:")
         print(x)
-        return -1;
+        return -1
 
     try:
         cur.execute('''
@@ -84,15 +102,15 @@ def DB_Status():
             LIMIT  3;
         ''')
     except Exception, x:
-        print("Their was an error trying to querry for the top 3 articles" )
+        print("Their was an error trying to querry for the top 3 articles")
         print(x)
-        return -1;
+        return -1
 
     top_3_articals = cur.fetchall()
 
     try:
         cur.execute(
-        '''
+            '''
             SELECT authors.name ,SUM(views) AS views
             FROM authors, (
                 SELECT articles.author, articles.title ,COUNT(*) AS views
@@ -106,13 +124,13 @@ def DB_Status():
             GROUP BY authors.name
             ORDER BY views DESC;
         '''
-            )
+        )
     except Exception, x:
         print("top autohors failed to exicute")
         print(x)
-        return -1;
+        return -1
 
-    top_autohors=cur.fetchall()
+    top_autohors = cur.fetchall()
 
     try:
         cur.execute('''SELECT *
@@ -141,12 +159,11 @@ WHERE  failure_percentage > 1;
     except Exception, x:
         print("important errors failed to exicute")
         print(x)
-        return -1;
+        return -1
 
-    important_errors=cur.fetchall()
-
-    print_results(top_3_articals,top_autohors,important_errors);
-
+    important_errors = cur.fetchall()
+    cur.close()
+    print_results(top_3_articals, top_autohors, important_errors)
 
 
 if __name__ == "__main__":
