@@ -60,11 +60,12 @@ top authors, and errors that are over 1% of all requests.
 '''
 def DB_Status():
     try:
-        conn=psycopg2.connect(
-            "dbname='news' user='vagrant' host='localhost' password='password'")
+        conn=psycopg2.connect(database="news")
         cur=conn.cursor()
-    except:
-        print "I am unable to connect to the database"
+    except Exception, x:
+        print ("I am unable to connect to the database:")
+        print(x)
+        return -1;
 
     try:
         cur.execute('''
@@ -79,9 +80,10 @@ def DB_Status():
             ORDER  BY views DESC
             LIMIT  3;
         ''')
-    except:
+    except Exception, x:
         print("Their was an error trying to querry for the top 3 articles" )
-
+        print(x)
+        return -1;
 
     top_3_articals = cur.fetchall()
 
@@ -102,34 +104,40 @@ def DB_Status():
             ORDER BY views DESC;
         '''
             )
-    except:
-        print("top 3 articles failed to exicute")
+    except Exception, x:
+        print("top autohors failed to exicute")
+        print(x)
+        return -1;
 
     top_autohors=cur.fetchall()
 
-    cur.execute(
-    '''
-    SELECT final.date,
-           failure_percentage
-    FROM   (SELECT success.date,
-                   Round(100 * ( Cast(errors.count AS NUMERIC) / Cast (
-                                 success.count AS NUMERIC) ),
-                   2) AS failure_percentage
-            FROM   (SELECT Date_trunc('day', time) AS date,
-                           Count(status)
-                    FROM   log
-                    WHERE  status = '404 NOT FOUND'
-                    GROUP  BY date
-                    ORDER  BY date) AS errors,
-                   (SELECT Date_trunc('day', time) AS date,
-                           Count(status)
-                    FROM   log
-                    WHERE  status = '200 OK'
-                    GROUP  BY date
-                    ORDER  BY date) AS success
-            WHERE  errors.date = success.date) AS final
-    WHERE  failure_percentage > 1;
-    ''')
+    try:
+        cur.execute('''
+                SELECT final.date,
+                       failure_percentage
+                FROM   (SELECT success.date,
+                               Round(100 * ( Cast(errors.count AS NUMERIC) / Cast (
+                                             success.count AS NUMERIC) ),
+                               2) AS failure_percentage
+                        FROM   (SELECT Date_trunc('day', time) AS date,
+                                       Count(status)
+                                FROM   log
+                                WHERE  status = '404 NOT FOUND'
+                                GROUP  BY date
+                                ORDER  BY date) AS errors,
+                               (SELECT Date_trunc('day', time) AS date,
+                                       Count(status)
+                                FROM   log
+                                WHERE  status = '200 OK'
+                                GROUP  BY date
+                                ORDER  BY date) AS success
+                        WHERE  errors.date = success.date) AS final
+                WHERE  failure_percentage > 1;
+                ''')
+    except Exception, x:
+        print("important errors failed to exicute")
+        print(x)
+        return -1;
 
     important_errors=cur.fetchall()
 
