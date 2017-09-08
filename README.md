@@ -13,6 +13,10 @@ This was my first Udacity backend project for my full stack developer course.
 * PostgreSQL 9.5 - newer
 
 ### Running
+First download the newsdata.sql file from udacity and put it into the udacity-log-analysis directory.
+
+[newsdata.sql](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
+
 Run the following command when first installed.
 ~~~
 psql -d news -f newsdata.sql
