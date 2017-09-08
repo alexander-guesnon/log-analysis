@@ -51,6 +51,9 @@ def print_results(t3a, ta, ie):
     Log_Output = Log_Output + "-----------------------------------------------------------------------------\n"
     print(Log_Output)
 
+    fileout = open('log_output.txt','w')
+    fileout.write(Log_Output)
+    fileout.close()
 
 '''
 Input: void
