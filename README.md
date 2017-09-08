@@ -13,10 +13,20 @@ This was my first Udacity backend project for my full stack developer course.
 * PostgreSQL 9.5 - newer
 
 ### Running
-Launch a terminal in the Udacity-Log-Analysis directory. Then run the following.
+Run the following command when first installed.
+~~~
+psql -d news -f newsdata.sql
+~~~
+After the database is loaded you can run the following.
 ~~~
 python db-analysis-tool.py
 ~~~
+If you want to reset the database run the following commands.
+~~~
+echo 'drop table log; drop table articles; drop table authors;' | psql news
+psql -d news -f newsdata.sql
+~~~
+
 
 ## License
 Udacity-Log-Analysis is distributed under the GPLv3 license.
