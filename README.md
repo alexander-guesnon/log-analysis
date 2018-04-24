@@ -1,5 +1,5 @@
-# Udacity-Log-Analysis
-This was my first Udacity backend project for my full stack developer course.
+# Log-Analysis
+This program was made to review some website's logs and then give the required output. The program tested on an Ubuntu VM.
 ## Outline
  * Create a python program to display the following information.
   * Show the top 3 articles in the database
@@ -13,24 +13,24 @@ This was my first Udacity backend project for my full stack developer course.
 * PostgreSQL 9.5 - newer
 
 ### Running
-First download the newsdata.sql file from udacity and put it into the udacity-log-analysis directory.
+First, download the newsdata.sql file and put it into the log-analysis directory.
 
 [newsdata.sql](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
 
 Run the following command when first installed.
 ~~~
-psql -d news -f newsdata.sql
+sql -d news -f newsdata.sql
 ~~~
 After the database is loaded you can run the following.
 ~~~
-python db-analysis-tool.py
+python DB-analysis-tool.py
 ~~~
 If you want to reset the database run the following commands.
 ~~~
 echo 'drop table log; drop table articles; drop table authors;' | psql news
-psql -d news -f newsdata.sql
+sql -d news -f newsdata.sql
 ~~~
 
 
 ## License
-Udacity-Log-Analysis is distributed under the GPLv3 license.
+Log-Analysis is distributed under the GPLv3 license.
